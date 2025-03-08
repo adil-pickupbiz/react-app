@@ -6,13 +6,17 @@ import UpdateUser from "./componets/updateUsers/updateUser";
 
 const App = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<GetUser />} />
-                <Route path="/register" element={<RegisterUse />} />
-                <Route path="/update/:userId" element={<UpdateUser />} />
-            </Routes>
-        </Router>
+        <div>
+            <h1>Wellcome to react deploye project </h1>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<GetUser />} />
+                    <Route path="/register" element={<RegisterUse />} />
+                    <Route path="/update/:userId" element={<UpdateUser />} />
+                </Routes>
+            </Router>
+        </div>
+        
     );
 };
 
