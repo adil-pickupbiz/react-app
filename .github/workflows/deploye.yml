@@ -40,16 +40,21 @@ jobs:
             git config --global user.name "$EC2_USER_NAME"
             git config --global user.email "$EC2_EMAIL_ID"
 
-        
-
-            # If directory doesn't exist, clone the repo
-            if [ ! -d "react-app" ]; then
-              git clone git@github.com:pickupbiz/react-app.git react-app
+            # Ensure PM2 is installed globally
+            if ! command -v pm2 &> /dev/null
+            then
+                npm install -g pm2
             fi
 
-            cd react-app
+            # If directory doesn't exist, clone the repo
+            if [ ! -d "/home/ubuntu/react-app" ]; then
+              git clone git@github.com:pickupbiz/react-app.git /home/ubuntu/react-app
+            fi
+
+            cd /home/ubuntu/react-app
 
             # Pull latest changes
+            git reset --hard
             git pull origin main
 
             # Install dependencies
@@ -59,11 +64,14 @@ jobs:
             npm run build
 
             # Serve the app using PM2
-            if pm2 list | grep -q "REACTAPP"; then
-              pm2 restart REACTAPP
-            else
-              pm2 serve build 3000 --spa --name "REACTAPP"
-            fi
+            pm2 delete REACTAPP || true  # Delete previous instance if exists
+            pm2 serve build 3000 --spa --name "REACTAPP"
+
+            # Save PM2 process
+            pm2 save
+
+            # Restart PM2 on reboot
+            pm2 startup systemd
           EOF
 
       - name: Cleanup
