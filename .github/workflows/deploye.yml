@@ -40,8 +40,7 @@ jobs:
             git config --global user.name "$EC2_USER_NAME"
             git config --global user.email "$EC2_EMAIL_ID"
 
-            # Navigate to deployment directory
-            cd /home/ubuntu || exit
+        
 
             # If directory doesn't exist, clone the repo
             if [ ! -d "react-app" ]; then
